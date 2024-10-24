@@ -6,7 +6,7 @@ jobs:
  testjob:
     strategy:
       matrix:
-        os: [macOS-13]
+        os: [macOS-14]
         
     runs-on: ${{ matrix.os }}
     
@@ -17,6 +17,4 @@ jobs:
         with:
             python-version: 3.7.17
             check-latest: false
-            update-environment: true
-            allow-prereleases: false
-            architecture: 'x86'
+            architecture: 'x64'
