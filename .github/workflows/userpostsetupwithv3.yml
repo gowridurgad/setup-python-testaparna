@@ -22,15 +22,11 @@ jobs:
       - name: Create pnpm cache directory
         run: mkdir -p $PNPM_CACHE_FOLDER
 
-      - name: Check Cache Directory
-        run: ls -la $PNPM_CACHE_FOLDER
-
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: 'pnpm'
-          cache-key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
 
       - name: Setup pnpm store config
         run: pnpm config set store-dir $PNPM_CACHE_FOLDER
@@ -40,3 +36,6 @@ jobs:
 
       - name: List node_modules
         run: ls -la node_modules
+
+      - name: Check Cache Directory
+        run: ls -la $PNPM_CACHE_FOLDER
