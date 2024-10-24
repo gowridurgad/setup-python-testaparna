@@ -32,7 +32,8 @@ jobs:
         run: echo "Cache path: $PNPM_CACHE_FOLDER"
 
       - name: List pnpm cache contents
-        run: ls -la $PNPM_CACHE_FOLDER || echo "Cache directory does not exist"
+        run: |
+          ls -la $PNPM_CACHE_FOLDER || echo "Cache directory does not exist"
 
       - name: Cache pnpm store
         uses: actions/cache@v3
@@ -46,4 +47,5 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: List node_modules
-        run: ls -la node_modules || echo "node_modules directory does not exist"
+        run: |
+          ls -la node_modules || echo "node_modules directory does not exist"
