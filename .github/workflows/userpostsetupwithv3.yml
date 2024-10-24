@@ -27,7 +27,12 @@ jobs:
       - name: Setup pnpm store config
         run: |
           pnpm config set store-dir $PNPM_CACHE_FOLDER
-          echo "Configured pnpm store directory: $PNPM_CACHE_FOLDER"
+
+      - name: Check PNPM Cache Path
+        run: echo "Cache path: $PNPM_CACHE_FOLDER"
+
+      - name: List pnpm cache contents
+        run: ls -la $PNPM_CACHE_FOLDER || echo "Cache directory does not exist"
 
       - name: Cache pnpm store
         uses: actions/cache@v3
@@ -42,6 +47,3 @@ jobs:
 
       - name: List node_modules
         run: ls -la node_modules || echo "node_modules directory does not exist"
-
-      - name: List pnpm cache contents
-        run: ls -la $PNPM_CACHE_FOLDER/v3 || echo "Cache v3 directory does not exist"
