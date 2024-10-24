@@ -1,4 +1,4 @@
-name: User Post Setup Tests with v3
+name: user post setup Tests with v3
 on:
   workflow_dispatch:
 
@@ -25,19 +25,20 @@ jobs:
           node-version: 18
 
       - name: Setup pnpm store config
-        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
+        run: |
+          pnpm config set store-dir $PNPM_CACHE_FOLDER
+          echo "Configured pnpm store directory: $PNPM_CACHE_FOLDER"
 
       - name: Check PNPM Cache Path
         run: echo "Cache path: $PNPM_CACHE_FOLDER"
 
       - name: List pnpm cache contents
-        run: |
-          ls -la $PNPM_CACHE_FOLDER || echo "Cache directory does not exist"
+        run: ls -la $PNPM_CACHE_FOLDER || echo "Cache directory does not exist"
 
       - name: Cache pnpm store
         uses: actions/cache@v3
         with:
-          path: ${{ env.PNPM_CACHE_FOLDER }}
+          path: $PNPM_CACHE_FOLDER
           key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-
@@ -46,5 +47,4 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: List node_modules
-        run: |
-          ls -la node_modules || echo "node_modules directory does not exist"
+        run: ls -la node_modules || echo "node_modules directory does not exist"
