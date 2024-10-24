@@ -23,12 +23,19 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'pnpm'
 
       - name: Setup pnpm store config
         run: |
           pnpm config set store-dir $PNPM_CACHE_FOLDER
           echo "Configured pnpm store directory: $PNPM_CACHE_FOLDER"
+
+      - name: Cache pnpm store
+        uses: actions/cache@v3
+        with:
+          path: $PNPM_CACHE_FOLDER
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -36,5 +43,5 @@ jobs:
       - name: List node_modules
         run: ls -la node_modules || echo "node_modules directory does not exist"
 
-      - name: Check Cache Directory
-        run: ls -la $PNPM_CACHE_FOLDER || echo "Cache directory does not exist"
+      - name: List pnpm cache contents
+        run: ls -la $PNPM_CACHE_FOLDER/v3 || echo "Cache v3 directory does not exist"
