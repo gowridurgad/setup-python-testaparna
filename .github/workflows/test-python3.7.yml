@@ -19,4 +19,4 @@ jobs:
             check-latest: false
             update-environment: true
             allow-prereleases: false
-            architecture: 'x64'
+            architecture: 'x86'
