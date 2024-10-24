@@ -30,9 +30,13 @@ jobs:
         with:
           node-version: 18
           cache: 'pnpm'
+          cache-key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
 
       - name: Setup pnpm store config
         run: pnpm config set store-dir $PNPM_CACHE_FOLDER
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: List node_modules
+        run: ls -la node_modules
