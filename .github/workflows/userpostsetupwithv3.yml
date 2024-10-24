@@ -1,4 +1,4 @@
-name: user post setup Tests with v3
+name: User Post Setup Tests with v3
 on:
   workflow_dispatch:
 
@@ -25,8 +25,7 @@ jobs:
           node-version: 18
 
       - name: Setup pnpm store config
-        run: |
-          pnpm config set store-dir $PNPM_CACHE_FOLDER
+        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
 
       - name: Check PNPM Cache Path
         run: echo "Cache path: $PNPM_CACHE_FOLDER"
@@ -38,7 +37,7 @@ jobs:
       - name: Cache pnpm store
         uses: actions/cache@v3
         with:
-          path: $PNPM_CACHE_FOLDER
+          path: ${{ env.PNPM_CACHE_FOLDER }}
           key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-
