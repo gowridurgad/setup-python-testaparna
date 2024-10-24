@@ -19,32 +19,24 @@ jobs:
       - name: Set up pnpm
         uses: pnpm/action-setup@v4
 
+      - name: Create pnpm cache directory
+        run: mkdir -p $PNPM_CACHE_FOLDER
+
+      - name: Check Cache Directory
+        run: ls -la $PNPM_CACHE_FOLDER
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
+          cache: 'pnpm'
+          cache-key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
 
       - name: Setup pnpm store config
-        run: |
-          pnpm config set store-dir $PNPM_CACHE_FOLDER
-          echo "Configured pnpm store directory: $PNPM_CACHE_FOLDER"
-
-      - name: Check PNPM Cache Path
-        run: echo "Cache path: $PNPM_CACHE_FOLDER"
-
-      - name: List pnpm cache contents
-        run: ls -la $PNPM_CACHE_FOLDER || echo "Cache directory does not exist"
-
-      - name: Cache pnpm store
-        uses: actions/cache@v3
-        with:
-          path: $PNPM_CACHE_FOLDER
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
+        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: List node_modules
-        run: ls -la node_modules || echo "node_modules directory does not exist"
+        run: ls -la node_modules
