@@ -9,7 +9,6 @@ jobs:
     name: 'Version and open PR (or) release private packages'
     timeout-minutes: 15
     runs-on: ubuntu-latest
-    environment: 'Production - Private Packages'
     steps:
       - name: Checkout code repository
         uses: actions/checkout@v3
@@ -35,7 +34,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: List node_modules
-        run: ls -la node_modules
+        run: ls -la node_modules || echo "node_modules directory does not exist"
 
       - name: Check Cache Directory
-        run: ls -la $PNPM_CACHE_FOLDER
+        run: ls -la $PNPM_CACHE_FOLDER || echo "Cache directory does not exist"
