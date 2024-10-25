@@ -4,14 +4,22 @@ on: [push]
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Install CUDA and cuDNN
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          cuda-11-4 \
+          libcudnn8 \
+          libcudnn8-dev
+
     - name: Set up Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v2
       with:
         python-version: '3.9.4'
 
