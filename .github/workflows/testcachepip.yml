@@ -16,7 +16,7 @@ jobs:
         python-version: '3.9.4'
 
     - name: Set library path
-      run: echo "/usr/local/cuda/lib64" >> $GITHUB_ENV
+      run: echo "LD_LIBRARY_PATH=/usr/local/cuda/lib64" >> $GITHUB_ENV
 
     - name: Install dependencies
       run: pip install -r requirements.txt
