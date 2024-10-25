@@ -1,3 +1,4 @@
+name: test module
 on:
   workflow_dispatch:
 
