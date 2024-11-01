@@ -2,8 +2,7 @@ name: User Post Setup Tests with v3
 on:
   workflow_dispatch:
 
-env:
-  PNPM_CACHE_FOLDER: .pnpm-store  
+
 
 jobs:
   version_or_release:
