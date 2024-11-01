@@ -1,31 +1,63 @@
-name: CI
-
+name: User Post Setup Tests with v3
 on:
   workflow_dispatch:
 
+env:
+  PNPM_CACHE_FOLDER: .pnpm-store  
+
 jobs:
-  build:
+  version_or_release:
+    name: 'Version and open PR (or) release private packages'
+    timeout-minutes: 15
     runs-on: ubuntu-latest
-
+    environment: 'Production - Private Packages'
     steps:
-      - name: Checkout repository
+      - name: Checkout code repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      
+      - uses: pnpm/action-setup@v4
+      
+      - name: Create PNPM Cache Directory
+        run: mkdir -p $PNPM_CACHE_FOLDER  # Ensure the cache directory exists
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: 18
+          cache: 'pnpm'  # Use 'pnpm' to enable pnpm caching
 
-      - name: Cache pnpm store
-        uses: actions/cache@v3
-        with:
-          path: .pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
+      - name: Verify PNPM Cache Directory
+        run: |
+          if [ ! -d "/home/runner/setup-pnpm/node_modules/.bin/store/v3" ]; then
+            echo "PNPM cache directory does not exist, creating it."
+            mkdir -p /home/runner/setup-pnpm/node_modules/.bin/store/v3
+          else
+            echo "PNPM cache directory exists."
+          fi
 
-      - name: Install dependencies
+      - name: Check for pnpm-lock.yaml
+        run: |
+          if [ ! -f "pnpm-lock.yaml" ]; then
+            echo "pnpm-lock.yaml file is missing in the repository."
+            exit 1
+          else
+            echo "pnpm-lock.yaml file found."
+          fi
+
+      - name: Setup PNPM Store Config
+        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
+
+      - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run your tests
-        run: pnpm test
+      - name: Debug Cache Directory
+        run: |
+          echo "Contents of PNPM Cache Directory:"
+          ls -la $PNPM_CACHE_FOLDER  # Verify the cache directory contents
+
+      - name: List Node Modules
+        run: |
+          echo "Contents of Node Modules Directory:"
+          ls -la node_modules  # Check the node_modules structure
