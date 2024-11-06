@@ -6,7 +6,7 @@ jobs:
  testjob:
     strategy:
       matrix:
-        os: [macOS-14]
+        os: [macOS-14, macos-13]
         
     runs-on: ${{ matrix.os }}
     
