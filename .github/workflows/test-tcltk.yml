@@ -1,0 +1,21 @@
+name: Test Python Tk
+
+on: 
+   workflow_dispatch : 
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.7
+
+    - name: Reinstall tcl-tk
+      run: brew reinstall tcl-tk
+
+    - name: Run script
+      run: python tk_min.py
