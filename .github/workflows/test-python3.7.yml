@@ -1,0 +1,21 @@
+name: test python3.7
+on:
+ workflow_dispatch:
+
+jobs:
+ testjob:
+    strategy:
+      matrix:
+        os: [macos-12]
+        
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+      
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+            python-version: 3.7.17
+            check-latest: false
+            architecture: 'x64'
+      - run: python -c 'import readline'

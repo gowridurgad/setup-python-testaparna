@@ -1,8 +1,15 @@
-[tool.poetry]
-name = "my-package"
-version = "0.1.0"
-description = "My package description"
-authors = ["gowridurgad <gowridurga.d@github.com>"]
+[tool.coverage.report]
+exclude_lines = [
+  "if TYPE_CHECKING:",
+  "pragma: no cover",
+  "raise NotImplementedError"
+]
+fail_under = 100
+omit = [
+  "**/tm_devices/commands/**"  # TODO: remove this exclusion
+]
+show_missing = true
+skip_empty = true
+
 [tool.poetry.dependencies]
-python = "^3.8"
-requests = "^2.25.1"
+python = "^3.8"  # This is the main Python version requirement

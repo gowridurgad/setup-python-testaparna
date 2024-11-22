@@ -1,0 +1,31 @@
+name: Python Setup Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-python:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 'pypy-3.11-nightly'
+
+      - name: Show environment variables
+        run: env
+
+      - name: Python package install
+        run: |
+          pip install PyGObject
+
+      - name: Log outputs
+        run: |
+          ls -la /opt/hostedtoolcache
+          ls -la $(pwd)/_work/_tool

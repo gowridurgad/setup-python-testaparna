@@ -1,16 +1,36 @@
-name: test cache pnpm
+name: test cache
 
 on:
  workflow_dispatch:
 
 jobs:
-  testjob:
-    name: Compute results
+ testjob:
+    name: pip
+    runs-on: ubuntu-24.04
+    
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aparnajyothi-y/setup-python@update-error-message
+        with:
+           python-version: '3.7.17'
+           cache: 'pnpm'
+ testjob_pipenv:
+    name: pipenv cache
     runs-on: ubuntu-latest
     
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: aparnajyothi-y/setup-python@update-error-message
         with:
            python-version: '3.7.17'
            cache: 'pipenv'
+ testjob_poetry:
+    name: poetry cache
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aparnajyothi-y/setup-python@update-error-message
+        with:
+           python-version: '3.7.17'
+           cache: 'poetry'

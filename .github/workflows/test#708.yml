@@ -1,0 +1,17 @@
+name: Checkout and Setup of Workflow
+on: 
+ workflow_dispatch:
+ 
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: priya-kinthali/setup-python@708-pr-test-agent
+        with:
+          python-version: '3.10.14'
+          architecture : 'x64'
+      - name: Check Python version
+        run: python --version

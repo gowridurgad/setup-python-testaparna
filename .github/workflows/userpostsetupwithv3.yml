@@ -1,39 +1,63 @@
-name: user post setup Tests with v3
+name: User Post Setup Tests with v3
 on:
- workflow_dispatch:
+  workflow_dispatch:
+
+env:
+  PNPM_CACHE_FOLDER: .pnpm-store  
 
 jobs:
-  testv3:
-  
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - macos-latest
-          
-        python-version:
-          - 3.8
-          - 3.9
-          - "3.10"
+  version_or_release:
+    name: 'Version and open PR (or) release private packages'
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    environment: 'Production - Private Packages'
     steps:
-     
-      - name: Setup Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
+      - name: Checkout code repository
+        uses: actions/checkout@v3
         with:
-          python-version: ${{ matrix.python-version }}
-      - name: Setup msbuild on Windows
-        if: matrix.os == 'windows-latest'
-        uses: microsoft/setup-msbuild@v1.1
-      - name: Set up Visual Studio shell
-        if: matrix.os == 'windows-latest'
-        uses: egor-tensin/vs-shell@v2
+          fetch-depth: 0
+      
+      - uses: pnpm/action-setup@v4
+      
+      - name: Create PNPM Cache Directory
+        run: mkdir -p $PNPM_CACHE_FOLDER  # Ensure the cache directory exists
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          arch: x64
-      - name: Check out source repository
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - name: Install dependencies
+          node-version: 18
+          cache: 'pnpm'  # Use 'pnpm' to enable pnpm caching
+
+      - name: Verify PNPM Cache Directory
         run: |
-          pip3 install -r requirements.txt
+          if [ ! -d "$PNPM_CACHE_FOLDER/store/v3" ]; then
+            echo "PNPM cache directory does not exist, creating it."
+            mkdir -p "$PNPM_CACHE_FOLDER/store/v3"
+          else
+            echo "PNPM cache directory exists."
+          fi
+      
+      - name: Check for pnpm-lock.yaml
+        run: |
+          if [ ! -f "pnpm-lock.yaml" ]; then
+            echo "pnpm-lock.yaml file is missing in the repository."
+            exit 1
+          else
+            echo "pnpm-lock.yaml file found."
+          fi
+
+      - name: Setup PNPM Store Config
+        run: pnpm config set store-dir "$PNPM_CACHE_FOLDER"
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Debug Cache Directory
+        run: |
+          echo "Contents of PNPM Cache Directory:"
+          ls -la "$PNPM_CACHE_FOLDER"  # Verify the cache directory contents
+
+      - name: List Node Modules
+        run: |
+          echo "Contents of Node Modules Directory:"
+          ls -la node_modules  # Check the node_modules structure
