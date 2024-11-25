@@ -20,6 +20,9 @@ jobs:
           cache: 'pnpm'
           cache-dependency-path: '/home/runner/work/setup-python-testaparna/setup-python-testaparna/pnpm-lock.yaml'
 
+      - name: Install dependencies
+        run: pnpm install
+
       - name: Verify pnpm-lock.yaml Path
         run: |
           echo "Current directory: $(pwd)"
