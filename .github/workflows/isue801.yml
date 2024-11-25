@@ -1,13 +1,13 @@
 name: issue801
 
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
- testjob:
+  testjob:
     name: pip
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
       - name: Setup pnpm
@@ -16,5 +16,11 @@ jobs:
           version: 8
       - uses: actions/setup-node@v4
         with:
-           node-version: '22'
-           cache: 'pnpm'
+          node-version: '22'
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
+
+      - name: Verify pnpm-lock.yaml Path
+        run: |
+          echo "Current directory: $(pwd)"
+          ls -al pnpm-lock.yaml
