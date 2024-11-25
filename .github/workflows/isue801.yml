@@ -5,7 +5,7 @@ on:
 
 jobs:
   testjob:
-    name: pip
+   
     runs-on: ubuntu-latest
 
     steps:
